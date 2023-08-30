@@ -1,7 +1,7 @@
 ---
 layout: home
 hero:
-  name: 老王技术文档
+  name: 老王技术文档-前端
   text: 前端学习笔记
   actions:
     - theme: brand
