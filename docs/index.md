@@ -10,7 +10,10 @@ hero:
     - theme: alt
       text: 在GitHub上查看
       link: 'df'
-
+  image:
+    src: /img/logo.ico
+    alt: 网页logo
+    
 features:
   - title: 好玩
     details: Minimal setup with markdown-centered project structure helps you focus on writing.
