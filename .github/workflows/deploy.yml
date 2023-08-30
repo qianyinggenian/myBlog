@@ -6,7 +6,8 @@ on:
   # Runs on pushes targeting the `main` branch. Change this to `master` if you're
   # using the `master` branch as the default branch.
   push:
-    branches: 
+  #  branches: [master]
+    branches:
       - main
 
   # Allows you to run this workflow manually from the Actions tab
@@ -22,7 +23,7 @@ permissions:
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   # Build job
@@ -38,11 +39,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm # or pnpm / yarn
+#          cache: npm # or pnpm / yarn
+          cache: yarn
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Install dependencies
-        run: npm ci # or pnpm install / yarn install
+#        run: npm ci # or pnpm install / yarn install
+        run:  yarn install
       - name: Build with VitePress
         run: |
           npm run docs:build # or pnpm docs:build / yarn docs:build
