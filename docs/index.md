@@ -9,7 +9,7 @@ hero:
       link: /base/
     - theme: alt
       text: 在GitHub上查看
-      link: 'df'
+      link: 'https://github.com/qianyinggenian/myBlog'
   image:
     src: /img/logo.ico
     alt: 网页logo
