@@ -79,11 +79,6 @@ export default {
       label: '简体中文',
       lang: 'zh-cn',
       link: ''
-    },
-    fr: {
-      label: 'French',
-      lang: 'fr', // optional, will be added  as `lang` attribute on `html` tag
-      link: '' // default /fr/ -- shows on navbar translations menu, can be external
     }
   }
 }
