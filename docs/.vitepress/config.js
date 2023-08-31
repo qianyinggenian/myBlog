@@ -41,6 +41,9 @@ export default {
 				]
 			},
 			{ text: 'JavaScript', link: '/base/JavaScript/' }
-		]
+		],
+    search: {
+      provider: 'local'
+    }
 	}
 }
