@@ -103,3 +103,41 @@ export function generateEndpoint (socketURI) {
 
 ```
 
+## 3-6 拷贝
+```js
+JSON.parse(JSON.stringify(Value))
+```
+## 3-7 判断对象是否为空
+```js
+if (Object.keys(obj).length === 0) {
+  console.log('空对象');
+  } else {
+    console.log('非空对象');
+  }
+```
+## 3-8 判断浏览器类型
+```js
+export function browserType () {
+  var userAgent = navigator.userAgent; // 取得浏览器的userAgent字符串
+  // 判断是否Opera浏览器
+  if (userAgent.indexOf('Opera') > -1) {
+    return 'isOpera';
+  }
+  // 判断是否Firefox浏览器
+  if (userAgent.indexOf('Firefox') > -1) {
+    return 'Firefox';
+  }
+  // 判断是否Chrome浏览器
+  if (userAgent.indexOf('Chrome') > -1) {
+    return 'Chrome';
+  }
+  // 判断是否Safari浏览器
+  if (userAgent.indexOf('Safari') > -1) {
+    return 'Safari';
+  }
+  // 判断是否IE浏览器
+  if (!!window.ActiveXObject || 'ActiveXObject' in window) {
+    return 'isIE';
+  }
+}
+```

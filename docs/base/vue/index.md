@@ -352,3 +352,19 @@ export default {
 
 ```
 
+
+## 4-5 数据字典转换
+```vue
+  computed: {
+	dictionary () {
+	      return (val) => {
+	        if (this.dictionaryValue&& this.dictionaryValue.length > 0 && val) {
+              const result = this.dictionaryValue.find(item => val === item.displayValue);
+	          return result ? result.displayName : val;
+	        } else {
+	          return '';
+	        }
+	      };
+	    }
+    }
+```
