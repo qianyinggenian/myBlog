@@ -24,23 +24,16 @@ export default {
 		//   侧边导航
 		sidebar: [
 			{ text: '前端基础', link: '/base/' },
-			{
-				text: 'Vue', link: '/base/vue/',
-				items: [
-					{
-						text: '导航',
-						link: '/base/vue/index1',
-						items: [
-							{
-								text: '导航一',
-								link: '/base/vue/index2'
-
-							}
-						]
-					}
-				]
-			},
-			{ text: 'JavaScript', link: '/base/JavaScript/' }
+      { text: '1、正则',
+        link: '/base/regular/index'
+      },
+      { text: '2、CSS',
+        link: '/base/CSS/index'
+      },
+			{ text: '3、JavaScript', link: '/base/JavaScript/' },
+      {
+        text: '4、Vue', link: '/base/vue/'
+      }
 		],
     search: {
       provider: 'local'
