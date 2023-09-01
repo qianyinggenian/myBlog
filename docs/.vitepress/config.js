@@ -33,6 +33,9 @@ export default {
 			{ text: '3、JavaScript', link: '/base/JavaScript/' },
       {
         text: '4、Vue', link: '/base/vue/'
+      },
+      {
+        text: '5、常用网站', link: '/base/commonWebsite/'
       }
 		],
     search: {
