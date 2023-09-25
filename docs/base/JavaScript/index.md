@@ -141,3 +141,43 @@ export function browserType () {
   }
 }
 ```
+## 3-9 对象深度克隆
+```js
+// 参考：http://www.seozhijia.net/javascript/238.html
+/**
+ *判断对象是否是一个纯粹的对象
+ */
+function isPlainObject (obj) {
+  return typeof obj === 'object' && Object.prototype.toString.call(obj) === '[object Object]';
+}
+
+/**
+ *深度合并多个对象的方法
+ */
+export function deepAssign () {
+  const len = arguments.length;
+  let target = arguments[0];
+  if (!isPlainObject(target)) {
+    target = {};
+  }
+  for (let i = 1; i < len; i++) {
+    const source = arguments[i];
+    if (isPlainObject(source)) {
+      for (const s in source) {
+        if (s === '__proto__' || target === source[s]) {
+          continue;
+        }
+        if (isPlainObject(source[s])) {
+          target[s] = deepAssign(target[s], source[s]);
+        } else {
+          target[s] = source[s];
+        }
+      }
+    }
+  }
+  return target;
+}
+// 自定义方法： const setting = deepAssign(this.defaultSetting, this.setting)
+// 使用Jquery方法
+// const setting = $.extend(true, this.defaultSetting, this.setting);
+```
