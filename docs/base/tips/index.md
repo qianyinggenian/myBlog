@@ -14,7 +14,7 @@ git remote -v
 git remote add 远程库名 远程库地址
 eg: git remote add gitee https://gitee.com/wkz_gitee/yian.git
 ```
-3、在输入步骤1的命令查看，结果如下
+3、再输入步骤1的命令查看，结果如下
 ![查看关联地址](/img/2.png)
 4、配置同时提交多个库命令
 ```
