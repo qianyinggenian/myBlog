@@ -36,6 +36,9 @@ export default {
       },
       {
         text: '5、常用网站', link: '/base/commonWebsite/'
+      },
+      {
+        text: '6、小技巧', link: '/base/tips/'
       }
 		],
     search: {
