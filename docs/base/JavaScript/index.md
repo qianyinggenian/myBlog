@@ -141,7 +141,7 @@ export function browserType () {
   }
 }
 ```
-## 3-9 对象深度克隆
+## 3-9 对象深度合并
 ```js
 // 参考：http://www.seozhijia.net/javascript/238.html
 /**
@@ -180,4 +180,101 @@ export function deepAssign () {
 // 自定义方法： const setting = deepAssign(this.defaultSetting, this.setting)
 // 使用Jquery方法
 // const setting = $.extend(true, this.defaultSetting, this.setting);
+```
+## 3-10 两个数组查找相同项
+```js
+const columns = [
+  {
+    "prop": "name",
+    "label": "姓名",
+    "minWidth": "150px"
+  },
+  {
+    "prop": "region",
+    "label": "区域",
+    "minWidth": "250px",
+    "slot": true,
+    "slotHeader": "region"
+  },
+  {
+    "prop": "province",
+    "label": "省份",
+    "slot": true,
+    "slotColumn": "province",
+    "minWidth": "250px"
+  },
+  {
+    "prop": "city",
+    "label": "城市",
+    "minWidth": "350px"
+  },
+  {
+    "prop": "county",
+    "label": "市县",
+    "minWidth": "250px"
+  },
+  {
+    "prop": "zip",
+    "label": "邮政编码",
+    "minWidth": "150px"
+  },
+  {
+    "prop": "creatDate",
+    "label": "创建日期",
+    "minWidth": "150px"
+  }
+];
+const list =[
+  "name",
+  "region",
+  "province",
+  "city",
+  "county",
+  "zip"
+]
+function getSame(columns, filterCheckList) {
+  const list = JSON.parse(JSON.stringify(columns));
+  return list.filter(item => {
+    return filterCheckList.some(val => item.prop === val);
+  });
+}
+console.log(getSame(columns,list))
+/* 结果如下
+[
+    {
+      "prop": "name",
+      "label": "姓名",
+      "minWidth": "150px"
+    },
+    {
+      "prop": "region",
+      "label": "区域",
+      "minWidth": "250px",
+      "slot": true,
+      "slotHeader": "region"
+    },
+    {
+      "prop": "province",
+      "label": "省份",
+      "slot": true,
+      "slotColumn": "province",
+      "minWidth": "250px"
+    },
+    {
+      "prop": "city",
+      "label": "城市",
+      "minWidth": "350px"
+    },
+    {
+      "prop": "county",
+      "label": "市县",
+      "minWidth": "250px"
+    },
+    {
+      "prop": "zip",
+      "label": "邮政编码",
+      "minWidth": "150px"
+    }
+]
+*/
 ```
