@@ -368,3 +368,175 @@ export default {
 	    }
     }
 ```
+## 4-6 el-select 二次封装，添加title属性
+### 4-6-1 文件目录
+![文件目录](/img/3.png)
+### 4-6-2 继承el-select, 组将名为my-select
+```vue
+<!--继承el-select, 组将名为my-select-->
+<script>
+import { Select } from 'element-ui';
+
+export default {
+  name: 'mySelect',
+  extends: Select
+};
+</script>
+
+<style scoped>
+
+</style>
+
+```
+### 4-6-3 对el-select进行拓展
+```vue
+<!-- 对el-select进行拓展 -->
+<template>
+  <MySelect
+      :title="selectTitle"
+      v-model="selectValue"
+      v-bind="$attrs"
+      v-on="$listeners">
+    <el-option
+        v-for="item in options"
+        :key="item[keyValue]"
+        :label="item[keyLabel]"
+        :value="item[keyValue]">
+    </el-option>
+  </MySelect>
+</template>
+
+<script>
+import MySelect from './my-select.vue';
+
+export default {
+  name: 'index',
+  components: {
+    MySelect
+  },
+  data () {
+    return {
+      selectTitle: '',
+      selectValue: null
+    };
+  },
+  props: {
+    value: {
+      type: [String, Array]
+    },
+    keyValue: {
+      type: String,
+      default: 'value'
+    },
+    keyLabel: {
+      type: String,
+      default: 'label'
+    },
+    options: {
+      type: Array,
+      default: () => []
+    }
+  },
+  watch: {
+    value: {
+      handler (newVal) {
+        console.log('newVal', newVal);
+      }
+    },
+    selectValue: {
+      handler (newVal) {
+        if (newVal && newVal.length) {
+          if (typeof newVal === 'string') {
+            const result = this.options.find(item => item[this.keyValue] === newVal);
+            if (result) {
+              this.selectTitle = result[this.keyLabel];
+            } else {
+              this.selectTitle = '';
+            }
+          } else {
+            this.getArrTitle();
+          }
+        } else {
+          this.selectTitle = '';
+        }
+      }
+    }
+  },
+  methods: {
+    getArrTitle () {
+      const list = JSON.parse(JSON.stringify(this.options));
+      const arr = [];
+      this.selectValue.forEach(val => {
+        for (const key of list) {
+          if (val === key[this.keyValue]) {
+            arr.push(key);
+          }
+        }
+      });
+      this.selectTitle = arr.map(value => value[this.keyLabel]).toString();
+    }
+  }
+};
+</script>
+
+<style scoped>
+
+</style>
+
+```
+### 4-6-4 使用拓展后的el-select
+```vue
+<!-- 使用拓展后的el-select -->
+<template>
+  <proxySelect
+      multiple
+      v-model="value"
+      :options="options"
+      clearable>
+  </proxySelect>
+</template>
+
+<script>
+import proxySelect from './index.vue';
+
+export default {
+  name: 'dome',
+  components: {
+    proxySelect
+  },
+  data () {
+    return {
+
+      value: '',
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }]
+    };
+  },
+  props: {},
+  watch: {},
+  computed: {},
+  mounted () {
+  },
+  methods: {}
+};
+</script>
+
+<style scoped>
+
+</style>
+
+```
