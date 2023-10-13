@@ -119,3 +119,97 @@
 ```
 ![边框四个角自定义样式](/img/边框四个角自定义样式.png)边框四个角自定义样式
 # 
+## 2-4 表格列错位 
+```html
+<!--html代码-->
+        <table >
+          <tr>
+            <td class="border-right" colspan="2">
+              <span class="star">*</span>测试
+            </td>
+            <td colspan="6">
+              <el-form-item prop="ledgerName" :title="formData.ledgerName" label="台账名称" :rules="[$validate.Required2]">
+                <el-input size="small" v-model="formData.ledgerName" placeholder="" :disabled="disabled" clearable></el-input>
+              </el-form-item>
+            </td>
+          </tr>
+          <tr >
+            <td class="border-right" colspan="2">测试</td>
+            <td class="border-right" colspan="2">
+              <el-form-item prop="ledgerName" :title="formData.ledgerName" label="台账名称" :rules="[$validate.Required2]">
+                <el-input size="small" v-model="formData.ledgerName" placeholder="" :disabled="disabled" clearable></el-input>
+              </el-form-item>
+            </td>
+            <td class="border-right" colspan="2">
+              <span  class="star">*</span>测试
+            </td>
+            <td colspan="2">
+              <el-form-item prop="ledgerName" :title="formData.ledgerName" label="台账名称" :rules="[$validate.Required2]">
+                <el-input size="small" v-model="formData.ledgerName" placeholder="" :disabled="disabled" clearable></el-input>
+              </el-form-item>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-right" colspan="1">
+              <span class="star">*</span>测试
+            </td>
+            <td class="border-right"  colspan="7">
+
+              <el-form-item prop="ledgerName" :title="formData.ledgerName" label="台账名称" :rules="[$validate.Required2]">
+                <el-input  type="textarea"
+                           :rows="5" size="small" v-model="formData.ledgerName" placeholder="" :disabled="disabled" clearable></el-input>
+              </el-form-item>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-right" colspan="1">
+              <span class="star">*</span>测试
+            </td>
+            <td class="border-right"  colspan="7">
+
+              <el-form-item prop="ledgerName" :title="formData.ledgerName" label="台账名称" :rules="[$validate.Required2]">
+                <el-input  type="textarea"
+                           :rows="5" size="small" v-model="formData.ledgerName" placeholder="" :disabled="disabled" clearable></el-input>
+              </el-form-item>
+            </td>
+          </tr>
+          <tr>
+            <td class="border-right" colspan="1">
+              <span class="star">*</span>测试
+            </td>
+            <td class="border-right"  colspan="7">
+
+              <el-form-item prop="ledgerName" :title="formData.ledgerName" label="台账名称" :rules="[$validate.Required2]">
+                <el-input  type="textarea"
+                           :rows="5" size="small" v-model="formData.ledgerName" placeholder="" :disabled="disabled" clearable></el-input>
+              </el-form-item>
+            </td>
+          </tr>
+        </table>
+```
+```scss
+ table {
+        table-layout: fixed; // 重点，实现列错位的重点
+        width: 100%;
+        border: 2px solid #f2f2f2;
+        tr {
+          border-bottom: 2px solid #f2f2f2;
+          td {
+            height: 100%;
+            box-sizing: border-box;
+            padding: 15px;
+            vertical-align: middle;
+            text-align: center;
+            font-size: 16px;
+          }
+        }
+        .border-right {
+          border-right: 2px solid #f2f2f2;
+        }
+      }
+
+.star {
+  color: red;
+}
+```
+![表格列错位](/img/4.png)表格列错位
