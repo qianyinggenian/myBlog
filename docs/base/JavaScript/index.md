@@ -278,3 +278,32 @@ console.log(getSame(columns,list))
 ]
 */
 ```
+## 3-11 echarts 地图名称位置更改 
+#### 添加cp数组字段，值为经纬度坐标
+```json
+"properties": {
+        "adcode": 130000,
+        "name": "河北省",
+        "center": [
+          114.502461,
+          38.045474
+        ],
+        "cp": [
+          115.158691,
+          38.045474
+        ],
+        "childrenNum": 11,
+        "level": "province",
+        "parent": {
+          "adcode": 100000
+        },
+        "subFeatureIndex": 2,
+        "acroutes": [
+          100000
+        ]
+      }
+```
+#### 更改前
+![更改前](/img/5.png)
+#### 更改后
+![更改后](/img/6.png)
