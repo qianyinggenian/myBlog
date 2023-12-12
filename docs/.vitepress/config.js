@@ -39,6 +39,9 @@ export default {
       },
       {
         text: '6、小技巧', link: '/base/tips/'
+      },
+      {
+        text: '7、threeJs', link: '/base/threeJs/'
       }
 		],
     search: {
