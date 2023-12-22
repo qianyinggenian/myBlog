@@ -63,7 +63,7 @@ export default {
       },
       /**
        * @Description 添加menu菜单
-       * @author wangkangzhang
+       * @author 
        * @date 2023/12/22
        */
       addMenu () {
@@ -98,13 +98,13 @@ export default {
       },
       /**
        * @Description 添加按钮
-       * @author wangkangzhang
+       * @author 
        * @date 2023/12/22
        */
       addButton() {
         const Button = this.$videojs.getComponent('Button');
         const button = new Button(this.player, {
-          className: 'vjs-visible-text',
+          className: 'vjs-visible-text custom-list',
           controlText: '按钮文本',
           clickHandler: (event) => {
             // 点击函数
@@ -121,6 +121,46 @@ export default {
     }
 };
 </script>
+<style lang="scss" scoped>
+// 这里使用的是elementUI
+::v-deep .custom-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 4em !important;
+  span {
+    &:first-child {
+      position: relative;
+      font-family: VideoJS;
+      font-weight: normal;
+      font-style: normal;
+      height: 100%;
+      width: 100%;
+      &::before {
+        content: "\e798";
+        font-family: element-icons;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    &:last-child {
+      display: none;
+    }
+  }
+}
+</style>
 ```
 ### 效果
 ![效果](/img/7.png)
+### 使用图标按钮，则加上自定义类名及样式custom-list，效果如下
+
+![效果](/img/8.png)
