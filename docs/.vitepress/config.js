@@ -42,6 +42,9 @@ export default {
       },
       {
         text: '7、threeJs', link: '/base/threeJs/'
+      },
+      {
+        text: '8、videojs', link: '/base/videojs/'
       }
 		],
     search: {
