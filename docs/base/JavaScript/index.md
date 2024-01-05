@@ -326,3 +326,16 @@ console.log(getSame(columns,list))
 ![更改前](/img/5.png)
 #### 更改后
 ![更改后](/img/6.png)
+## 3-12 复制
+```js
+function handleCopyResult () {
+      // const m3uOutput = document.getElementById('m3uOutput');
+      // m3uOutput.select();
+      // document.execCommand('copy');
+      // alert('内容已复制到剪贴板！');
+      // 下面为新语法
+      navigator.clipboard.writeText(this.vaule).then(() => {
+        this.$message.success('复制成功');
+      });
+    }
+```
