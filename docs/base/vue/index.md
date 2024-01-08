@@ -541,3 +541,65 @@ export default {
 </style>
 
 ```
+
+## 4-7 获取本地文件中的内容
+```vue
+<template>
+  <div>
+    <input id="file" accept="" type="file" @change="handleChange"/>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+export default {
+    components: {},
+      data () {
+        return {};
+      },
+      props: {},
+      watch: {},
+      computed: {},
+      mounted () {},
+      methods: {
+
+        /**
+         * @Description 选择文件后触发
+         * @author qianyinggenian
+         * @date 2024/01/08
+         */
+        handleChange (event) {
+          const file = event.target.files[0];
+          // 打印文件名及类型
+          console.log('文件名:', file.name);
+          console.log('文件类型:', file.type);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            console.log('文件路径:', reader.result);
+            this.getFileInfo(reader.result);
+          };
+          reader.readAsDataURL(file);
+        },
+        /**
+         * @Description 获取文件中的内容
+         * @author qianyinggenian
+         * @date 2024/01/08
+         */
+        getFileInfo (path) {
+          axios.get(path) // 这里的路径应根据实际情况修改
+              .then(response => {
+                this.fileContent = response.data;
+                console.log('fileContent', this.fileContent);
+              })
+              .catch(error => {
+                console.log('Error:', error);
+              });
+        }
+      }
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>
+```
