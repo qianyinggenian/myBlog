@@ -1,4 +1,4 @@
-## 同时提交代码至GitHub和Gitee
+## 1、同时提交代码至GitHub和Gitee
 
 1、输入如下命令查看当前关联的远程地址
 
@@ -20,7 +20,7 @@ eg: git remote add gitee https://gitee.com/wkz_gitee/yian.git
 ```
 git remote set-url --add origin 你的gitee项目地址或步骤2的远程库地址
 ```
-## gitee 获取仓库具体路径下的内容
+## 2、gitee 获取仓库具体路径下的内容
 ### 1、api地址：https://gitee.com/api/v5/swagger#/getV5ReposOwnerRepoContents(Path)
 ### api:https://gitee.com/api/v5/repos/{owner}/{repo}/contents(/{path})
 ![获取gitee文件内容](/img/获取gitee文件内容.png)
@@ -45,3 +45,8 @@ git remote set-url --add origin 你的gitee项目地址或步骤2的远程库地
         });
       }
 ```
+## 3、github获取仓库具体路径下的内容
+
+### 1、api地址：https://docs.github.com/zh/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
+### api: https://api.github.com/repos/OWNER/REPO/contents/PATH
+![获取GitHub文件内容](/img/获取GitHub文件内容.png)

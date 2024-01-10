@@ -546,7 +546,7 @@ export default {
 ```vue
 <template>
   <div>
-    <input id="file" accept="" type="file" @change="handleChange"/>
+    <input id="file" accept=""  type="file" @change="handleChange"/>
   </div>
 </template>
 
