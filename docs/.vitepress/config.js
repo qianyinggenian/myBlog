@@ -45,6 +45,9 @@ export default {
       },
       {
         text: '8、videojs', link: '/base/videojs/'
+      },
+      {
+        text: '9、elementUI', link: '/base/elementUI/'
       }
 		],
     search: {
