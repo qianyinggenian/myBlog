@@ -715,3 +715,124 @@ const columns = [
 ```
 ### 效果：
 ![ant-table列合并](/img/ant-table列合并.png)
+## 4-9 ant-table表格校验
+```vue
+<template>
+  <a-form
+      ref="formRef"
+      :model="formData"
+  >
+    <a-table
+        class="ant-table-striped"
+        ref="ctTableRef"
+        :data-source="formData.tableData"
+        bordered
+        :pagination="false"
+        :columns="columns"
+        :defaultExpandAllRows="true"
+    >
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'test'">
+          <p>name:{{record.namePath}}</p>
+          <a-form-item
+              :rules="rules.requiredStr"
+              validateFirst
+              :title="record[column.dataIndex]"
+              :name="record.namePath"
+          >
+            <a-input
+                v-model:value="record[column.dataIndex]"
+                allowClear
+                :maxlength="100"
+            ></a-input>
+          </a-form-item>
+        </template>
+      </template>
+    </a-table>
+  </a-form>
+</template>
+<script setup>
+import { ref } from 'vue';
+
+const formRef = ref();
+const rules = ref({
+  requiredStr: [{ required: true, message: '非空项', trigger: 'blur' }]
+});
+const columns = ref([
+  {
+    title: '节点',
+    dataIndex: 'text',
+    key: 'text',
+    ellipsis: true,
+    width: 250
+  },
+  {
+    title: '测试',
+    dataIndex: 'test',
+    key: 'test',
+    ellipsis: true,
+    width: 250
+  }
+]);
+const formData = ref({
+  tableData: [{
+    id: '1',
+    parentId: 'root',
+    text: '根节点',
+    actionUrl: '',
+    type: '',
+    showOperatePrivilege: true,
+    effectiveFlag: '1',
+    iconSkin: '',
+    chkDisabled: false,
+    checked: false,
+    open: true,
+    nocheck: false,
+    sortOrder: 1,
+    namePath: ['tableData', 0, 'test'],
+    children: [
+      {
+        id: '8a74839b8d582387018d58eedf870026',
+        parentId: '1',
+        text: '二级节点',
+        code: '8a74839b8d582387018d58eedf870026',
+        actionUrl: '',
+        type: '',
+        namePath: ['tableData', 0, 'children', 0, 'test'],
+        showOperatePrivilege: true,
+        effectiveFlag: '1',
+        iconSkin: '',
+        chkDisabled: false,
+        checked: false,
+        open: true,
+        nocheck: false,
+        children: [
+          {
+            id: '8a74839b8d582387018d58eedf870026',
+            parentId: '8a74839b8d582387018d58eedf870026',
+            text: '三级节点',
+            code: '8a74839b8d582387018d58eedf870026',
+            actionUrl: '',
+            type: '',
+            showOperatePrivilege: true,
+            effectiveFlag: '1',
+            iconSkin: '',
+            chkDisabled: false,
+            checked: false,
+            open: true,
+            nocheck: false,
+            year: '三级节点',
+            isEnd: true,
+            namePath: ['tableData', 0, 'children', 0, 'children', 0, 'test']
+          },
+        ],
+      }
+    ]
+  }]
+});
+</script>
+
+```
+### 效果：
+![ant-table表格校验1](/img/ant-table表格校验1.png)
+![ant-table表格校验2](/img/ant-table表格校验2.png)
