@@ -603,3 +603,115 @@ export default {
 
 </style>
 ```
+## 4-8 ant-table列合并
+```vue
+<template>
+  <ct-table :columns="columns" :data-source="data" :pagination="false" bordered>
+    <template #bodyCell="{ column, text }">
+      <template v-if="column.dataIndex === 'name'">
+        <a href="javascript:;">{{ text }}</a>
+      </template>
+    </template>
+  </ct-table>
+</template>
+<script setup>
+
+const data = [
+  {
+    key: '1',
+    name: 'John Brown',
+    age: 32,
+    tel: '0571-22098909',
+    phone: 18889898989,
+    address: 'New York No. 1 Lake Park',
+  },
+  {
+    key: '2',
+    name: 'Jim Green',
+    tel: '0571-22098333',
+    phone: 18889898888,
+    age: 42,
+    address: 'London No. 1 Lake Park',
+  },
+  {
+    key: '3',
+    name: 'Joe Black',
+    age: 32,
+    tel: '0575-22098909',
+    phone: 18900010002,
+    address: 'Sidney No. 1 Lake Park',
+  },
+  {
+    key: '4',
+    name: 'Jim Red',
+    age: 18,
+    tel: '0575-22098909',
+    phone: 18900010002,
+    address: 'London No. 2 Lake Park',
+  },
+  {
+    key: '5',
+    name: 'Jake White',
+    age: 18,
+    tel: '0575-22098909',
+    phone: 18900010002,
+    address: 'Dublin No. 2 Lake Park',
+  },
+];
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    colSpan: 1,
+  },
+  {
+    title: 'Home phone',
+    colSpan: 2,
+    dataIndex: 'tel',
+    customCell(_, index) {
+      if (index >= 2) {
+        return { colSpan: 2 };
+      }
+      return { colSpan: 1 };
+    },
+  },
+  {
+    title: 'Phone',
+    colSpan: 0,
+    dataIndex: 'phone',
+    customCell(_, index) {
+      if (index >= 2) {
+        return { colSpan: 0 };
+      }
+      return { colSpan: 1 };
+    },
+  },
+  {
+    title: 'Address',
+    colSpan: 2,
+    dataIndex: 'address',
+    customCell(_, index) {
+      if (index >= 2) {
+        return { colSpan: 2 };
+      }
+      return { colSpan: 1 };
+    },
+  },
+  {
+    title: 'Age',
+    colSpan: 0,
+    dataIndex: 'age',
+    customCell(_, index) {
+      if (index >= 2) {
+        return { colSpan: 0 };
+      }
+      return { colSpan: 1 };
+    },
+  },
+];
+</script>
+
+```
+### 效果：
+![ant-table列合并](/img/ant-table列合并.png)
