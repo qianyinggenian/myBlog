@@ -837,7 +837,7 @@ const formData = ref({
 ![ant-table表格校验1](/img/ant-table表格校验1.png)
 ![ant-table表格校验2](/img/ant-table表格校验2.png)
 
-## 图片水印
+## 4-10 图片水印
 ```vue
 <template>
   <div class="watermarkImage">
@@ -1110,4 +1110,35 @@ export default {
 }
 </style>
 
+```
+
+## 4-11 elementUI 滚动加载
+```js
+
+/**
+ * @Description 监听表格滚动
+ * @author wangkangzhang
+ * @date 2024/4/11
+ */
+addEventListenerFn () {
+    this.$nextTick(() => {
+        // 获取节点
+        this.tableDistance = this.$refs.proxyTable.$refs.elTable.bodyWrapper;
+        this.tableDistance.addEventListener('scroll', () => {
+            // 滚动距离
+            const scrollTop = this.tableDistance.scrollTop;
+            // 变量windowHeight是可视区的高度
+            const windowHeight = this.tableDistance.clientHeight || this.tableDistance.clientHeight;
+            // 变量scrollHeight是滚动条的总高度
+            const scrollHeight = this.tableDistance.scrollHeight || this.tableDistance.scrollHeight;
+            // 这里是触底 自己按自己业务需求是写逻辑
+            if (scrollTop + windowHeight === scrollHeight) {
+                // 获取到的不是全部数据 当滚动到底部 继续获取新的数据
+                if (this.tableList.length < this.total) {
+                    this.load();
+                }
+            }
+        });
+    });
+},
 ```
