@@ -339,3 +339,33 @@ function handleCopyResult () {
       });
     }
 ```
+## 3-13 字符串分割
+```js
+/**
+ * @Description
+ * @author qianyinggenian
+ * @date 2024/4/19
+ * @str str 字符串
+ * @separatorChar separatorChar 分割字符
+ * @isIncludes isIncludes 是否包含分割字符
+ * @isLastIndex isLastIndex 是否从最后出现的分割字符
+ */
+export function getStr (str, separatorChar, isIncludes = false, isLastIndex = false) {
+  let index = str.indexOf(separatorChar);
+  if (isLastIndex) {
+    index = str.lastIndexOf(separatorChar);
+  } else {
+    index = str.indexOf(separatorChar);
+  }
+  if (index !== -1) {
+    const endStr = isIncludes ? str.slice(index) : str.slice(index + 1);
+    const startStr = isIncludes ? str.slice(0, index + 1) : str.slice(0, index);
+    return {
+      endStr,
+      startStr
+    };
+  } else {
+    return '';
+  }
+}
+```
