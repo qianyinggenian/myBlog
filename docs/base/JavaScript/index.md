@@ -369,3 +369,34 @@ export function getStr (str, separatorChar, isIncludes = false, isLastIndex = fa
   }
 }
 ```
+## 3-14 数值求和
+```js
+/**
+ * @Description 数组求和
+ * @author qianyinggenian
+ * @date 2024/4/26
+ */
+export function getSum (list, field) {
+  if (list?.length > 0) {
+    if (field) {
+      return list.reduce((acc, item) => {
+        return getValue(acc, item[field]);
+      }, 0);
+    } else {
+      return list.reduce((acc, val) => {
+        return getValue(acc, val);
+      }, 0);
+    }
+  } else {
+    return 0;
+  }
+  function getValue (acc, value) {
+    const fieldType = typeof value;
+    if (['number', 'string'].includes(fieldType) && Number(value)) {
+      return acc + Number(value);
+    } else {
+      return acc;
+    }
+  }
+}
+```
