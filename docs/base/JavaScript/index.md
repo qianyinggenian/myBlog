@@ -369,7 +369,7 @@ export function getStr (str, separatorChar, isIncludes = false, isLastIndex = fa
   }
 }
 ```
-## 3-14 数值求和
+## 3-14 数组求和
 ```js
 /**
  * @Description 数组求和
@@ -399,4 +399,105 @@ export function getSum (list, field) {
     }
   }
 }
+```
+## 3-15 标签页通信
+```js
+/**
+ * @Description 跨标签页通信
+ * @author qianyinggenian
+ * @date 2024/4/29
+ */
+const channel = new BroadcastChannel('my-channel');
+/**
+ * @Description 发送信息
+ * @author qianyinggenian
+ * @date 2024/4/29
+ */
+export function sendMsg (type, msg) {
+  channel.postMessage({ type, msg });
+}
+/**
+ * @Description 监听通信
+ * @author qianyinggenian
+ * @date 2024/4/29
+ */
+
+export function listenMsg (callback) {
+  const handler = (evt) => {
+    callback && callback(evt.data);
+  };
+  channel.addEventListener('message', handler);
+  return () => {
+    channel.removeEventListener('message', handler);
+  };
+}
+```
+### 3-15-1 发送页
+```vue
+
+<template>
+<div>
+  <el-button @click="handleSubmit">发送</el-button>
+</div>
+</template>
+<script>
+import { sendMsg } from '@/utils/util';
+
+export default {
+  components: {},
+  data () {
+    return {};
+  },
+  computed: {},
+  watch: {},
+  created () {},
+  mounted () {},
+  methods: {
+    handleSubmit () {
+      this.num += 1;
+      sendMsg('add', this.num);
+    }
+  }
+};
+</script>
+<style scoped lang="scss">
+
+</style>
+
+```
+
+### 3-15-2 监听页
+```vue
+
+<template>
+  <div></div>
+</template>
+<script>
+import { listenMsg } from '@/utils/util';
+export default {
+  components: {},
+  data () {
+    return {};
+  },
+  computed: {},
+  watch: {},
+  created () {},
+  mounted () {
+    this.removeListen = listenMsg((info) => {
+      console.log('info', info);
+      if (info.msg) {
+        this.count = info.msg;
+      }
+    });
+  },
+  destroyed () {
+    this.removeListen();
+  },
+  methods: {}
+};
+</script>
+<style scoped lang="scss">
+
+</style>
+
 ```
