@@ -338,6 +338,34 @@ function handleCopyResult () {
         this.$message.success('复制成功');
       });
     }
+
+// 复制高阶函数
+import { Message } from 'element-ui';
+export const copyText = (function () {
+    if (navigator.clipboard) {
+        return (text) => navigator.clipboard.writeText(text).then(() => {
+            Message({
+                message: '复制成功',
+                type: 'success',
+                duration: 3000
+            });
+        });
+    } else {
+        return (text) => {
+            const input = document.createElement('input');
+            input.setAttribute('value', text);
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            Message({
+                message: '复制成功',
+                type: 'success',
+                duration: 3000
+            });
+        };
+    }
+})();
 ```
 ## 3-13 字符串分割
 ```js
