@@ -48,6 +48,9 @@ export default {
       },
       {
         text: '9、elementUI', link: '/base/elementUI/'
+      },
+      {
+        text: '10、echarts', link: '/base/echarts/'
       }
 		],
     search: {
