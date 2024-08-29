@@ -1,4 +1,4 @@
-# vue3中使用echarts时，tooltip的trigger设置为axis时formatter不触发
+## vue3中使用echarts时，tooltip的trigger设置为axis时formatter不触发
 ```js
 tooltip: {
   trigger: "axis",
