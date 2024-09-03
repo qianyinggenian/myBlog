@@ -213,3 +213,96 @@
 }
 ```
 ![表格列错位](/img/4.png)表格列错位
+
+
+## 动画-div进入与离开动画
+```vue
+<template>
+  <div>
+    <transition name="left-fade">
+      <div v-show="isShow"></div>
+    </transition>
+    <transition name="bottom-fade">
+      <div v-show="isShow" />
+    </transition>
+    <transition name="right-fade">
+      <div v-show="isShow" />
+    </transition>
+  </div>
+</template>
+<script>
+  export default {
+    components: {},
+    data () {
+      return {
+        isShow: false
+      };
+    },
+    props: {},
+    computed: {},
+    watch: {},
+    created () {},
+    mounted () {
+      this.isShow = true;
+    },
+    methods: {}
+  };
+</script>
+<style lang="scss" scoped>
+  // 左边部分动画
+  $time: 0.5s;
+  .left-fade-enter-active {
+    transition: all $time ease;
+    animation-fill-mode: both;
+    transform: translate3d(0, 0, 0);
+  }
+  .left-fade-leave-active {
+    transition: all $time cubic-bezier(1, 0.5, 0.8, 1);
+    animation-fill-mode: both;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  .left-fade-enter-from,
+  .left-fade-leave-to {
+    animation-fill-mode: both;
+    transform: translate3d(-100%, 0, 0);
+    opacity: 0;
+  }
+  // 右边部分动画
+  .right-fade-enter-active {
+    transition: all $time ease;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .right-fade-leave-active {
+    transition: all $time cubic-bezier(1, 0.5, 0.8, 1);
+    transform: translate3d(100%, 0, 0);
+  }
+
+  .right-fade-enter-from,
+  .right-fade-leave-to {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+
+  // 中间部分动画
+  .bottom-fade-enter-active {
+    transition: all $time ease;
+    transform: translate3d(0, 0, 0);
+    animation-fill-mode: both;
+  }
+
+  .bottom-fade-leave-active {
+    transition: all $time cubic-bezier(1, 0.5, 0.8, 1);
+    transform: translate3d(0, 100%, 0);
+    animation-fill-mode: both;
+  }
+
+  .bottom-fade-enter-from,
+  .bottom-fade-leave-to {
+    transform: translate3d(0, 100%, 0);
+    animation-fill-mode: both;
+    opacity: 0;
+  }
+</style>
+```
