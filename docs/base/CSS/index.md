@@ -215,14 +215,14 @@
 ![表格列错位](/img/4.png)表格列错位
 
 
-## 动画-div进入与离开动画
+## 2-5 动画-div进入与离开动画
 ```vue
 <template>
   <div>
     <transition name="left-fade">
       <div v-show="isShow"></div>
     </transition>
-    <transition name="bottom-fade">
+    <transition name="middle-fade">
       <div v-show="isShow" />
     </transition>
     <transition name="right-fade">
@@ -286,20 +286,20 @@
   }
 
   // 中间部分动画
-  .bottom-fade-enter-active {
+  .middle-fade-enter-active {
     transition: all $time ease;
     transform: translate3d(0, 0, 0);
     animation-fill-mode: both;
   }
 
-  .bottom-fade-leave-active {
+  .middle-fade-leave-active {
     transition: all $time cubic-bezier(1, 0.5, 0.8, 1);
     transform: translate3d(0, 100%, 0);
     animation-fill-mode: both;
   }
 
-  .bottom-fade-enter-from,
-  .bottom-fade-leave-to {
+  .middle-fade-enter-from,
+  .middle-fade-leave-to {
     transform: translate3d(0, 100%, 0);
     animation-fill-mode: both;
     opacity: 0;
