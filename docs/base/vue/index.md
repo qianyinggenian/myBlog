@@ -1142,3 +1142,128 @@ addEventListenerFn () {
     });
 },
 ```
+
+## 4-12 vue3中使用tailwindcss
+### 1、安装依赖
+```vue
+yarn add -D tailwindcss postcss autoprefixer
+```
+### 2、在根目录中创建postcss.config.cjs和tailwind.config.js文件
+```js
+// postcss.config.cjs文件
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: { browsers: ['last 5 versions'] },
+  },
+};
+
+```
+```js
+// tailwind.config.js文件
+export default {
+  // 摇树优化
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  // 黑夜模式
+  darkMode: 'class', // false or 'media' or 'class'
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+
+```
+### 3、创建style.css文件，引入tailwindcss相关配置
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+### 4、在main.js中引入style.css，之后就可以在项目中应用tailwindcss了
+
+## 4-13 vue3中使用svg
+### 1、安装依赖
+```vue
+yarn add -D vite-plugin-svg-icons fast-glob
+```
+### 2、在vite.config.js文件中引入svg插件
+```js
+import { defineConfig } from 'vite';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import path from 'path';
+export default defineConfig({
+  plugins: [
+    createSvgIconsPlugin({
+      // 指定需要缓存的图标文件夹
+      iconDirs: [
+        path.resolve(__dirname, 'src/assets/icons/'), // 存放svg文件的路径
+      ],
+      // 指定symbolId格式
+      symbolId: 'icon-[dir]-[name]',
+    }),
+  ]
+});
+```
+#### svg存放目录
+![svg存放目录](/img/svg存放目录.jpg)svg存放目录
+### 3、创建svgIcon组件
+```vue
+<template>
+  <svg :class="svgClass"
+       aria-hidden="true"
+       :style="{width: size + 'px', height: size + 'px', fill: fill}">
+    <title>{{title}}</title>
+    <use :xlink:href="iconName" />
+  </svg>
+</template>
+
+<script setup>
+import {computed} from "vue";
+
+const props = defineProps({
+  iconClass: {
+    type: String,
+    required: true
+  },
+  className: {
+    type: String,
+    default: ''
+  },
+  size: {
+    type: Number,
+    default: 20
+  },
+  fill: {
+    type: String,
+    default: '#034a6c'
+  },
+  title: {
+    type: String
+  }
+});
+
+const iconName = computed(() => `#icon-${props.iconClass}`)
+const svgClass = computed(() =>{
+  if (props.className) {
+    return `svg-icon ${props.className}`;
+  }
+  return 'svg-icon';
+})
+</script>
+
+<style scoped>
+
+.svg-external-icon {
+  background-color: currentColor;
+  mask-size: cover!important;
+  display: inline-block;
+}
+</style>
+
+```
+### 4、在项目中使用svg,svgIcon需全局注册或在使用的文件中引入
+```vue
+<template>
+  <svg-icon icon-class="新增"></svg-icon>
+</template>
+```
