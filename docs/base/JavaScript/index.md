@@ -82,6 +82,40 @@ export function uniqueArray (arr, key) {
 ## 3-4 动态配置WebSocket
 
 ```js
+// 初始化连接
+function initWebSocket () {
+  if (typeof (WebSocket) === 'undefined') {
+    this.$message.error('您的浏览器不支持WebSocket！');
+  } else {
+    const userId = '';
+    const url = process.env.VUE_APP_SOCKET_URL;
+    const socketUrl = generateEndpoint(url);
+    // 实例化socket
+    this.socket = new WebSocket(`${socketUrl}/xx`);
+    // 监听socket连接
+    this.socket.onopen = () => {
+      console.log('websocket连接成功');
+    };
+    // 监听socket错误信息
+    this.socket.onerror = () => {
+      console.log('websocket连接错误');
+    };
+    // 监听socket断开
+    this.socket.onclose = () => {
+      console.log('websocket连接断开');
+      initWebSocket();
+    };
+    // 监听socket消息
+    this.socket.onmessage = ({ data }) => {
+      try {
+        // 这里写逻辑
+      } catch (e) {
+        console.log(e);
+      }
+    };
+  }
+}
+
 export function generateEndpoint (socketURI) {
   if (socketURI.includes('ws')) {
     return socketURI;
