@@ -1267,3 +1267,128 @@ const svgClass = computed(() =>{
   <svg-icon icon-class="新增"></svg-icon>
 </template>
 ```
+## 4-14、el-form表单中数组校验
+```vue
+
+<template>
+    <div class="form-container">
+      <el-form :model="formData" :rules="rules" ref="editForm"
+               label-width="auto" size="small">
+        <el-row type="flex" justify="space-between"
+                :gutter="30" align="top"
+                v-for="(item,index) in formData.testList" :key="index">
+          <el-col :span="8">
+            <ct-form-item label="测试1：" :prop="`testList.${index}.type1`" :rules="rules.type1">
+              <el-select v-model="item.type1" placeholder="请选择类型">
+                <el-option
+                    v-for="item in typeList"
+                    :key="item.displayValue"
+                    :label="item.displayName"
+                    :value="item.displayValue">
+                </el-option>
+              </el-select>
+            </ct-form-item>
+          </el-col>
+          <el-col :span="16">
+            <ct-form-item label="测试2：" required>
+              <el-col :span="10">
+                <ct-form-item  :title="item.test2"  :prop="`testList.${index}.test2`"  :rules="rules.test2">
+                  <el-input
+                      v-model="item.test2"
+                      placeholder="请填写"
+                      clearable>
+                  </el-input>
+                </ct-form-item>
+              </el-col>
+              <el-col :span="2"><span class="separator">至</span></el-col>
+              <el-col :span="10">
+                <ct-form-item :title="item.test3"  :prop="`testList.${index}.test3`"   :rules="rules.test3">
+                  <el-input
+                      v-model="item.test3"
+                      placeholder="请填写"
+                      clearable>
+                  </el-input>
+                </ct-form-item>
+              </el-col>
+            </ct-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-button type="primary" @click="handleSave">保存</el-button>
+    </div>
+</template>
+<script>
+
+  export default {
+    components: {},
+    data () {
+      return {
+        typeList: [
+          {
+            displayName: '测试1',
+            displayValue: '测试1'
+          },
+          {
+            displayName: '测试2',
+            displayValue: '测试2'
+          },
+          {
+            displayName: '测试3',
+            displayValue: '测试3'
+          }
+        ],
+        formData: {
+          testList: [
+            {
+              test1: '',
+              test2: '',
+              test3: ''
+            }
+          ]
+        },
+        rules: {
+          test1: [
+            { required: true, message: '请选择', trigger: 'change' }
+          ],
+          test2: [
+            { required: true, message: '请输入', trigger: 'blur' }
+          ],
+          test3: [
+            { required: true, message: '请输入', trigger: 'blur' }
+          ]
+        }
+      };
+    },
+    props: {},
+    computed: {},
+    watch: {},
+    created () {},
+    mounted () {},
+    methods: {
+      /**
+       * @Description 点击保存触发
+       * @author
+       * @date 2024/10/17
+       */
+      handleSave () {
+        try {
+          this.$refs.editForm.validate(async (valid) => {
+            if (valid) {
+            }
+          });
+        } catch (e) {
+          console.log(`error: ${e}`);
+        }
+      }
+    }
+  };
+</script>
+<style scoped lang="scss">
+  .separator {
+    color: red;
+  }
+</style>
+
+
+
+```
