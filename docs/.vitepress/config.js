@@ -51,6 +51,9 @@ export default {
       },
       {
         text: '10、echarts', link: '/base/echarts/'
+      },
+      {
+        text: '11、Webpack', link: '/base/Webpack/'
       }
 		],
     search: {
