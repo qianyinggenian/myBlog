@@ -54,6 +54,9 @@ export default {
       },
       {
         text: '11、Webpack', link: '/base/Webpack/'
+      },
+      {
+        text: '12、java', link: '/base/java/'
       }
 		],
     search: {
