@@ -1267,7 +1267,7 @@ const svgClass = computed(() =>{
   <svg-icon icon-class="新增"></svg-icon>
 </template>
 ```
-## 4-14、el-form表单中数组校验
+## 4-14 el-form表单中数组校验
 ```vue
 
 <template>
@@ -1390,5 +1390,36 @@ const svgClass = computed(() =>{
 </style>
 
 
+
+```
+## 4-15  Modal.confirm 提示内容自定义,多行显示
+```js
+<script setup>
+import {
+  createVNode
+} from 'vue';
+import { Modal } from 'ant-design-vue';
+
+
+function handleTest() {
+  const childrenDiv = [];
+  for (let i = 0; i < 6; i += 1) {
+    const item = createVNode('div', { class: 'item', }, `这是内层div的内容${i + 1}`);
+    childrenDiv.push(item);
+  }
+  const outerDivVNode = createVNode('div', { style: 'padding: 10px;' }, childrenDiv);
+  Modal.confirm({
+    title: '信息提示',
+    content: outerDivVNode, // 自定义的内容，多行显示
+    okText: '确认',
+    cancelText: '取消',
+    centered: true,
+    cancelButtonProps: { style: { display: 'none' } }, // 隐藏取消按钮
+    onOk: async () => {
+    }
+  });
+}
+
+</script>
 
 ```
