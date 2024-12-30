@@ -563,3 +563,64 @@ export default {
 </style>
 
 ```
+## 3-16 防抖函数
+```js
+
+/**
+ * @Description 防抖函数
+ * @author qianyinggenian
+ * @params method 函数
+ * @params delay 延时时间-毫秒
+ * @date 2024/12/30
+ */
+export function debounce (method, delay) {
+  let timer = null;
+  return function () {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      method(context, args);
+    }, delay);
+  };
+}
+```
+```vue
+<script>
+  import { debounce } from '@/utils/util';
+
+  export default {
+    components: {},
+    data () {
+      return {};
+    },
+    props: {},
+    computed: {},
+    watch: {},
+    created () {},
+    mounted () {},
+    methods: {
+      handleClick: debounce((vm, args) => {
+        const [params, params2, params3] = args;
+        console.log('params', params);
+        console.log('params2', params2);
+        console.log('params3', params3);
+        console.log('vm', vm);
+        vm.fn();
+      }, 2000),
+      fn () {
+        console.log('防抖输出');
+      }
+    }
+  };
+</script>
+
+<template>
+  <div><button class="btn type-1" @click="handleClick('参数1','参数2',false)">按钮</button></div>
+</template>
+
+<style scoped lang="scss">
+
+</style>
+
+```
