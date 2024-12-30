@@ -587,7 +587,7 @@ export function debounce (method, delay) {
 ```
 ```vue
 <script>
-
+  import { debounce } from '@/utils/util';
 
   export default {
     components: {},
