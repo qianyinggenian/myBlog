@@ -306,3 +306,87 @@
   }
 </style>
 ```
+## 2-6 sass与less颜色函数
+### 2-6-1 btn基础样式
+```css
+.btns-box {
+  display: flex;
+  margin-top: 10px;
+  .btn {
+    height: 32px;
+    width: 60px;
+    border-radius: 4px;
+  }
+  .btn + .btn {
+    margin-left: 10px;
+  }
+}
+```
+### 2-6-2 sass语法
+```sass
+// sass语法
+$btnColors: #409eff, #b03ac2,#8b590f,#f54343,#6c6d71;
+@for $i from 1 through length($btnColors) {
+  .btn.type-#{$i} {
+    $color: nth($btnColors, $i);
+    background: $color;
+    color: #fff;
+    border: 1px solid $color;
+    &:hover {
+      background: lighten($color,10%);
+      border: 1px solid lighten($color,10%);
+    }
+    &:active {
+      background: darken($color, 10%);
+      border: 1px solid darken($color,10%);
+    }
+    &:disabled {
+      background: lighten($color,20%);
+      border: 1px solid lighten($color,20%);
+      color: #fff;
+    }
+  }
+}
+```
+### 2-6-3 less语法
+```less
+// less语法
+@btnColors: #409eff, #b03ac2, #8b590f, #f54343, #6c6d71;
+
+.generate-btn-styles(@index) when (@index > 0) {
+  @color: extract(@btnColors, @index);
+  .btn.type-@{index} {
+    background: @color;
+    color: #fff;
+    &:hover {
+      background: lighten(@color, 10%);
+    }
+    &:active {
+      background: darken(@color, 10%);
+    }
+    &:disabled {
+      background: lighten(@color, 20%);
+      color: #fff;
+    }
+  }
+  .generate-btn-styles(@index - 1);
+}
+
+// 初始化循环，从最后一个颜色开始，因为Less的循环是递减的。
+.generate-btn-styles(length(@btnColors));
+
+```
+### 2-6-4 样例及效果
+#### 样例
+```html
+<div class="btns-box">
+    <button class="btn type-1">按钮</button>
+    <button class="btn type-2">按钮</button>
+    <button class="btn type-3">按钮</button>
+    <button disabled class="btn type-4">按钮</button>
+    <button  class="btn type-5">按钮</button>
+</div>
+```
+#### 效果
+![sass与less颜色函数效果](/img/sass与less颜色函数效果.png)
+
