@@ -1423,3 +1423,79 @@ function handleTest() {
 </script>
 
 ```
+## 4-16 a-time-picker时间段禁用
+### 时间段选择，开始时间和结束时间为空时，选择无限制，否则结束时间不能小于开始时间，开始时间不能大于结束时间
+```vue
+<script setup>
+import { ref } from 'vue';
+import dayjs from 'dayjs';
+
+const startTime = ref(null);
+const endTime = ref(null);
+// 禁用开始时间选择器中的小时、分钟、秒
+const disabledStartHours = () => {
+  if (!endTime.value) return [];
+  const endHour = dayjs(endTime.value, 'HH:mm:ss').hour();
+  return Array.from({ length: 24 - endHour }, (_, i) => endHour + 1 + i);
+};
+
+const disabledStartMinutes = (selectedHour) => {
+  if (!endTime.value || selectedHour !== dayjs(endTime.value, 'HH:mm:ss').hour()) return [];
+  const endMinute = dayjs(endTime.value, 'HH:mm:ss').minute();
+  return Array.from({ length: 60 - endMinute + 1 }, (_, i) => endMinute + i + 1);
+};
+
+const disabledStartSeconds = (selectedHour, selectedMinute) => {
+  if (!endTime.value || selectedHour !== dayjs(endTime.value, 'HH:mm:ss').hour() || selectedMinute !== dayjs(endTime.value, 'HH:mm:ss').minute()) {
+    return [];
+  }
+  const endSeconds = dayjs(endTime.value, 'HH:mm:ss').second();
+  return Array.from({ length: 60 - endSeconds + 1 }, (_, i) => endSeconds + i + 1);
+};
+
+// 禁用结束时间选择器中的小时、分钟、秒
+const disabledEndHours = () => {
+  if (!startTime.value) return [];
+  return Array.from({ length: dayjs(startTime.value, 'HH:mm:ss').hour() }, (_, i) => dayjs(startTime.value, 'HH:mm:ss').hour() - i - 1);
+};
+const disabledEndMinutes = (selectedHour) => {
+  if (!startTime.value || selectedHour !== dayjs(startTime.value, 'HH:mm:ss').hour()) return [];
+  const startMinute = dayjs(startTime.value, 'HH:mm:ss').minute();
+  return Array.from({ length: 60 - startMinute + 1 }, (_, i) => startMinute - i - 1);
+};
+
+const disabledEndSeconds = (selectedHour, selectedMinute) => {
+  if (!startTime.value || selectedHour !== dayjs(startTime.value, 'HH:mm:ss').hour() || selectedMinute !== dayjs(startTime.value, 'HH:mm:ss').minute()) {
+    return [];
+  }
+  const startSecond = dayjs(startTime.value, 'HH:mm:ss').second();
+  return Array.from({ length: startSecond }, (_, i) => i);
+};
+</script>
+
+<template>
+  <a-space :size="12">
+    <a-time-picker
+        v-model:value="startTime"
+        :disabled-hours="disabledStartHours"
+        :disabled-minutes="disabledStartMinutes"
+        :disabled-seconds="disabledStartSeconds"
+        valueFormat="HH:mm:ss"
+        placeholder="请选择开始时间"/>
+
+    <a-time-picker
+        v-model:value="endTime"
+        :disabled-hours="disabledEndHours"
+        :disabled-minutes="disabledEndMinutes"
+        :disabled-seconds="disabledEndSeconds"
+        valueFormat="HH:mm:ss"
+        placeholder="请选择结束时间"/>
+  </a-space>
+</template>
+
+<style scoped lang="less">
+
+</style>
+
+
+```
