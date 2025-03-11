@@ -3,6 +3,7 @@ export default {
 	base: '/myBlog/',// 简单说如下配置就会让你的项目的路径从 `https://domain.com/` 变成 `https://domain.com/base/`
 	lang: 'en-US', // 页面 HTML 的 lang 属性 `<html lang="en-US">`
 	title: '浅影歌年笔记',
+  appearance: 'dark',
 	description: '浅影歌年笔记',
 	head: [
 		// 改变title的图标
