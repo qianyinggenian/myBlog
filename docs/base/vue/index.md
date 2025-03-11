@@ -1499,3 +1499,174 @@ const disabledEndSeconds = (selectedHour, selectedMinute) => {
 
 
 ```
+## 4-17 el-time-picker时间段禁用
+```vue
+<script>
+export default {
+  components: {},
+  data () {
+    return {
+      startTime: '',
+      endTime: ''
+    };
+  },
+  props: {},
+
+  computed: {
+    // 开始时间选择器配置
+    startPickerOptions () {
+      return {
+        selectableRange: this.calcStartRange()
+      };
+    },
+    // 结束时间选择器配置
+    endPickerOptions () {
+      return {
+        selectableRange: this.calcEndRange()
+      };
+    }
+  },
+  watch: {},
+  created () {},
+  mounted () {},
+  methods: {
+    calcStartRange () {
+      if (!this.endTime) return [];
+      const end = `${this.endTime}:00`;
+      return [`00:00:00 - ${end}`];
+    },
+    calcEndRange () {
+      if (!this.startTime) return [];
+      const start = `${this.startTime}:00`;
+      return [`${start} - 23:59:59`];
+    }
+  }
+};
+</script>
+
+<template>
+<div>
+  <el-row type="flex" align="middle" justify="space-between">
+    <el-time-picker
+      size="mini"
+      :arrow-control="false"
+      v-model="startTime"
+      value-format="HH:mm"
+      format="HH:mm"
+      :picker-options="startPickerOptions"
+      placeholder="请选择开始时间">
+    </el-time-picker>
+    <div class="range-separator">至</div>
+    <el-time-picker
+      size="mini"
+      :arrow-control="false"
+      v-model="endTime"
+      value-format="HH:mm"
+      format="HH:mm"
+      :picker-options="endPickerOptions"
+      placeholder="请选择结束时间">
+    </el-time-picker>
+  </el-row>
+
+</div>
+</template>
+
+<style scoped lang="scss">
+
+</style>
+
+```
+
+## 4-18 a-date-picker时间段禁用
+```vue
+<script setup>
+  import { computed, ref } from 'vue';
+  import dayjs from 'dayjs';
+
+  const startDate = ref(null);
+  const endDate = ref(null);
+  // 禁用开始时间的选择（日期部分）
+  const disabledStartDate = (current) => {
+    if (!endDate.value) return false;
+    return current > dayjs(endDate.value).endOf('day');
+  };
+
+  // 禁用开始时间的选择（时间部分）
+  const disabledStartTime = computed(() => (value) => {
+    if (!endDate.value) return {};
+
+    const endTime = dayjs(endDate.value);
+    const startTime = dayjs(value);
+    const startHour = startTime.hour();
+    const endHour = endTime.hour();
+    return {
+      disabledHours: () => isSomDay(startTime, endTime) ? range(0, 24).filter((h) => h > endHour) : [],
+      disabledMinutes: () => isSomDay(startTime, endTime) ?
+          range(0, 60).filter((m) => startHour === endTime.hour() && m > endTime.minute()) : [],
+      disabledSeconds: () => isSomDay(startTime, endTime) ?
+          range(0, 60).filter((s) => startHour === endTime.hour() &&
+              startTime.minute() === endTime.minute() && s > endTime.second()) : [],
+    };
+  });
+
+  // 禁用结束时间的选择（日期部分）
+  const disabledEndDate = (current) => {
+    if (!startDate.value) return false;
+    return current < dayjs(startDate.value).startOf('day');
+  };
+
+  // 禁用结束时间的选择（时间部分）
+  const disabledEndTime = computed(() => (value) => {
+    if (!startDate.value) return {};
+    const startTime = dayjs(startDate.value);
+    const endTime = dayjs(value);
+    const startHour = startTime.hour();
+    const endHour = endTime.hour();
+    return {
+      disabledHours: () => isSomDay(startTime, endTime) ? range(0, 24).filter((h) => h < startHour) : [],
+      disabledMinutes: () => isSomDay(startTime, endTime) ?
+          range(0, 60).filter((m) => endHour === startHour && m < startTime.minute()) : [],
+      disabledSeconds: () => isSomDay(startTime, endTime) ? range(0, 60).filter((s) => endHour === startHour &&
+          endTime.minute() === startTime.minute() && s < startTime.second()) : [],
+    };
+  });
+  function isSomDay(startTime, endTime) {
+    return startTime.isSame(endTime, 'day');
+  }
+  // 开始时间变化时触发
+  const handleStartChange = (value) => {
+    // startDate.value = value;
+  };
+  const handleEndChange = (value) => {
+    // endDate.value = value;
+  };
+  // 辅助函数：生成范围数组
+  const range = (start, end) => Array.from({ length: end - start }, (_, i) => start + i);
+</script>
+<template>
+  <div class="flex">
+    <a-date-picker
+        :showTime="true"
+        class="custom-picker"
+        v-model:value="startDate"
+        format="YYYY-MM-DD HH:mm:ss"
+        value-format="YYYY-MM-DD HH:mm:ss"
+        :disabled-date="disabledStartDate"
+        :disabled-time="disabledStartTime"
+        @change="handleStartChange"
+    />
+    <span class="custom-picker-separator">--</span>
+    <a-date-picker
+        :showTime="true"
+        class="custom-picker"
+        v-model:value="endDate"
+        format="YYYY-MM-DD HH:mm:ss"
+        value-format="YYYY-MM-DD HH:mm:ss"
+        :disabled-date="disabledEndDate"
+        :disabled-time="disabledEndTime"
+        @change="handleEndChange"
+    />
+  </div>
+</template>
+
+```
