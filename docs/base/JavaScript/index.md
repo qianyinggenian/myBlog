@@ -624,3 +624,20 @@ export function debounce (method, delay) {
 </style>
 
 ```
+## 3-17 截图
+```js
+import html2canvas from 'html2canvas';
+setTimeout(() => {
+  // container截图范围节点id
+  html2canvas(document.getElementById('container'), {
+    useCORS: true, // 允许跨域资源加载
+    logging: true, // 开启控制台日志（调试用）
+    scale: 1 // 提高清晰度（可调整）
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'map.jpg';
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}, 500);
+```
