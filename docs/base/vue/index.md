@@ -1670,3 +1670,34 @@ export default {
 </template>
 
 ```
+
+## 4-19 vue3 动态修改系统title
+### 1、封装 useTitle 工具函数
+#### 创建组合式 API，通过 watchEffect 监听标题变化：
+```js
+// composables/useTitle.js
+import { ref, watchEffect } from 'vue';
+
+export function useTitle(initialTitle) {
+  const title = ref(initialTitle);
+  watchEffect(() => {
+    document.title = title.value;
+  });
+  return { title };
+}
+```
+### 2、在组件中使用响应式标题
+#### 组件内调用 useTitle，动态更新标题：
+```vue
+<script setup>
+import { useTitle } from '@/composables/useTitle';
+const productName = ref('Vue3 官方指南');
+const { title } = useTitle(`${productName.value} - 我的商城`);
+
+// 动态修改标题示例
+const updateTitle = () => {
+  productName.value = 'Vue3 深入解析';
+  title.value = `${productName.value} - 我的商城`;
+};
+</script>
+```
