@@ -50,3 +50,51 @@ git remote set-url --add origin 你的gitee项目地址或步骤2的远程库地
 ### 1、api地址：https://docs.github.com/zh/rest/repos/contents?apiVersion=2022-11-28#get-repository-content
 ### api: https://api.github.com/repos/OWNER/REPO/contents/PATH
 ![获取GitHub文件内容](/img/获取GitHub文件内容.png)
+
+## 4、镜像源设置
+
+### 1.设置淘宝镜像源：
+
+```
+npm config set registry https://registry.npmmirror.com
+```
+
+### 2.验证是否成功：
+
+```
+npm config get registry
+```
+
+### 3.输出应为：
+
+```
+https://registry.npmmirror.com/
+```
+
+
+
+### 4.设置官方源：
+
+```
+npm config set registry https://registry.npmjs.org
+```
+
+### 5.设置yarn镜像源：
+
+```
+yarn config set registry https://registry.npmmirror.com
+```
+
+### 6. 验证是否设置成功：
+
+```
+yarn config get registry
+```
+
+### 7.输出应为：
+
+```
+https://registry.npmmirror.com
+```
+
+
