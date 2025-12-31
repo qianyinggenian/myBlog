@@ -19,4 +19,7 @@ location /dist {
 ```
 start nginx
 ```
-访问测试项目[http://localhost:8088/dist](http://localhost:8088/dist)或[http://127.0.0.1:8088/dist](http://127.0.0.1:8088/dist)
+访问测试项目
+```html
+http://localhost:8088/dist或http://127.0.0.1:8088/dist
+```
