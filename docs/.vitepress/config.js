@@ -58,6 +58,9 @@ export default {
       },
       {
         text: '12、java', link: '/base/java/'
+      },
+      {
+        text: '13、nginx', link: '/base/nginx/'
       }
 		],
     search: {
