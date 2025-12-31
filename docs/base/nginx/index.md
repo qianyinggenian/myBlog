@@ -23,3 +23,4 @@ start nginx
 ```html
 http://localhost:8088/dist或http://127.0.0.1:8088/dist
 ```
+## 2、测试
