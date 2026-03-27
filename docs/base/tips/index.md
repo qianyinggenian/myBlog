@@ -170,3 +170,7 @@ docker pull ccr.ccs.tencentyun.com/library/minio:latest
 ```
 
 *注：如果这个命令能跑通，说明网络没问题，纯粹是 Docker 的配置文件没生效。*
+## 5、腾讯云安装宝塔面板
+```bash
+yum install -y wget && wget -O install.sh https://download.bt.cn/install/install_6.0.sh && sh install.sh ed8484bec
+```
