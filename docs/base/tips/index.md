@@ -98,3 +98,75 @@ https://registry.npmmirror.com
 ```
 
 
+## 4.宝塔面板安装minio注意事项
+
+#### 如果出现以下错误：
+```
+安装minio 
+正在启动,可能需要等待1-5分钟以上...
+minio_NRtc Pulling
+minio_NRtc Error Get "https://registry-1.docker.io/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+Error response from daemon: Get "https://registry-1.docker.io/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers)
+bt_failed 
+```
+####  解决方法：
+### 第一步：强制重新写入配置（腾讯云专用）
+
+请直接复制粘贴以下整段命令（从 `cat` 开始到 `EOF` 结束），不要只打一半：
+
+```bash
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json << 'EOF'
+{
+  "registry-mirrors": [
+    "https://mirror.ccs.tencentyun.com"
+  ]
+}
+EOF
+```
+
+*   **解释**：这里使用 `tee` 命令比 `cat` 更可靠，且 `sudo` 放在 `tee` 前面能确保有权限写入。
+
+### 第二步：重启 Docker
+
+```bash
+sudo systemctl restart docker
+```
+
+### 第三步：验证是否成功
+
+```bash
+docker info
+```
+
+**这时候，请仔细看 `Registry Mirrors` 这一栏：**
+
+*   ✅ **成功的样子**：只有一行 `https://mirror.ccs.tencentyun.com/`
+*   ❌ **失败的样子**：还是显示之前的 `ustc` 或 `163` 地址。
+
+---
+
+### 如果依然失败（进阶排查）
+
+如果执行完上面三步，`docker info` 依然显示旧地址，说明 Docker 读取的不是 `/etc/docker/daemon.json` 这个文件。
+
+请执行以下命令查看 Docker 实际的配置文件路径：
+
+```bash
+ps -ef | grep dockerd
+```
+
+看输出的最后有没有 `--config-file` 这个参数。
+*   如果有，去修改那个参数指定的文件。
+*   如果没有（通常是没有），请继续使用上面的 `/etc/docker/daemon.json`。
+
+**最后的大招（如果配置死活不生效）：**
+
+直接使用腾讯云镜像仓库的**完整镜像名**进行拉取，这不需要依赖任何配置文件：
+
+```bash
+# 这是 MinIO 在腾讯云镜像仓库里的“别名”
+docker pull ccr.ccs.tencentyun.com/library/minio:latest
+```
+
+*注：如果这个命令能跑通，说明网络没问题，纯粹是 Docker 的配置文件没生效。*
