@@ -70,26 +70,28 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # 【新增】部署到 Dist 分支
+  # Deployment to Dist Branch Job
   deploy-dist:
     needs: build
     runs-on: ubuntu-latest
-    name: Deploy to Dist Branch
-    # 【关键修复2】Job 级别权限（最重要）
+    # 【关键】确保这里也有写权限
     permissions:
-      contents: write # 显式声明这个 Job 需要写入代码库的权限
-
+      contents: write
     steps:
-      - name: Download artifact
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages
-          path: dist
+          path: ./dist-temp # 下载到临时目录
 
-      - name: Deploy to Dist Branch
+      - name: Deploy to dist branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./dist-temp # 指向刚才下载的临时目录
           publish_branch: dist
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
+          # 以下配置是为了保证 dist 分支干净整洁
+          keep_files: false
