@@ -68,25 +68,25 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  # 【新增】部署到宝塔服务器
-  deploy-bt:
+  # 【新增】部署到 Dist 分支
+  deploy-dist:
     needs: build
     runs-on: ubuntu-latest
-    name: Deploy to Bt Panel
+    name: Deploy to Dist Branch
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages
-          path: dist # 下载构建好的文件到 dist 目录
+          path: dist # 把构建产物下载到 dist 目录
 
-      - name: Deploy via SSH
-        uses: easingthemes/ssh-deploy@v4
+      - name: Deploy to Dist Branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
-          REMOTE_USER: ${{ secrets.SERVER_USER }}
-          REMOTE_PORT: 22
-          SOURCE: "dist/"
-          TARGET: "/www/wwwroot/document/myBlog"
-          ARGS: "-avz --delete"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # 指定要推送的目录
+          publish_branch: dist # 目标分支名称
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          # 保持历史提交记录（可选，设为 false 则每次都是全新提交）
+          # commit_message: ${{ github.event.head_commit.message }}
