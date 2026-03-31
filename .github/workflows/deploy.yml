@@ -71,27 +71,31 @@ jobs:
 
   # 【新增】部署到 Dist 分支
   # Deployment to Dist Branch Job
+  # 【修正版】部署到 Dist 分支
   deploy-dist:
     needs: build
     runs-on: ubuntu-latest
-    # 【关键】确保这里也有写权限
     permissions:
       contents: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      # 1. 下载构件 (此时得到的是 artifact.tar)
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages
-          path: ./dist-temp # 下载到临时目录
+          path: ./download
 
+      # 2. 解压文件 (关键步骤)
+      - name: Extract Artifact
+        run: |
+          mkdir -p ./dist-content
+          tar -xvf ./download/artifact.tar -C ./dist-content
+
+      # 3. 推送解压后的文件夹内容
       - name: Deploy to dist branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist-temp # 指向刚才下载的临时目录
+          publish_dir: ./dist-content # 指向解压后的目录
           publish_branch: dist
-          # 以下配置是为了保证 dist 分支干净整洁
           keep_files: false
