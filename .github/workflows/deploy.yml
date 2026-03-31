@@ -15,7 +15,7 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -24,6 +24,7 @@ permissions:
 concurrency:
   group: pages
   cancel-in-progress: true
+
 
 jobs:
   # Build job
@@ -73,20 +74,22 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     name: Deploy to Dist Branch
+    # 【关键修复2】Job 级别权限（最重要）
+    permissions:
+      contents: write # 显式声明这个 Job 需要写入代码库的权限
+
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: github-pages
-          path: dist # 把构建产物下载到 dist 目录
+          path: dist
 
       - name: Deploy to Dist Branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # 指定要推送的目录
-          publish_branch: dist # 目标分支名称
+          publish_dir: ./dist
+          publish_branch: dist
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          # 保持历史提交记录（可选，设为 false 则每次都是全新提交）
-          # commit_message: ${{ github.event.head_commit.message }}
