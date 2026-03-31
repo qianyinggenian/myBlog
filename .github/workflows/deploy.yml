@@ -67,3 +67,26 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # 【新增】部署到宝塔服务器
+  deploy-bt:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy to Bt Panel
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: dist # 下载构建好的文件到 dist 目录
+
+      - name: Deploy via SSH
+        uses: easingthemes/ssh-deploy@v4
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+          REMOTE_PORT: 22
+          SOURCE: "dist/"
+          TARGET: "/www/wwwroot/document/myBlog"
+          ARGS: "-avz --delete"
