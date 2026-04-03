@@ -641,3 +641,189 @@ setTimeout(() => {
   });
 }, 500);
 ```
+## 3-18 获取文件媒体类型
+```js
+const mimeTypeMap = {
+  // --- 常用办公文档 (Office & PDF) ---
+  pdf: 'application/pdf',
+  xls: 'application/vnd.ms-excel',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  doc: 'application/msword',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ppt: 'application/vnd.ms-powerpoint',
+  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  csv: 'text/csv',
+  rtf: 'application/rtf', // 富文本格式
+
+  // --- 图片格式 (Images) ---
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  gif: 'image/gif',
+  bmp: 'image/bmp',
+  svg: 'image/svg+xml',
+  webp: 'image/webp',
+  ico: 'image/x-icon',
+  tiff: 'image/tiff',
+  tif: 'image/tiff',
+
+  // --- 音视频格式 (Audio & Video) ---
+  mp3: 'audio/mpeg',
+  wav: 'audio/wav',
+  ogg: 'audio/ogg',
+  mp4: 'video/mp4',
+  avi: 'video/x-msvideo',
+  mov: 'video/quicktime',
+  wmv: 'video/x-ms-wmv',
+  flv: 'video/x-flv',
+  webm: 'video/webm',
+  m4a: 'audio/mp4',
+
+  // --- 压缩包 (Archives) ---
+  zip: 'application/zip',
+  rar: 'application/x-rar-compressed',
+  '7z': 'application/x-7z-compressed',
+  tar: 'application/x-tar',
+  gz: 'application/gzip',
+
+  // --- 文本与代码 (Text & Code) ---
+  txt: 'text/plain',
+  html: 'text/html',
+  htm: 'text/html',
+  css: 'text/css',
+  js: 'application/javascript', // 或 text/javascript
+  json: 'application/json',
+  xml: 'application/xml', // 或 text/xml
+  md: 'text/markdown',
+  java: 'text/x-java-source',
+  py: 'text/x-python',
+  c: 'text/x-c',
+  cpp: 'text/x-c++src',
+  h: 'text/x-c',
+  yaml: 'application/x-yaml',
+  yml: 'application/x-yaml',
+
+  // --- 字体 (Fonts) ---
+  ttf: 'font/ttf',
+  otf: 'font/otf',
+  woff: 'font/woff',
+  woff2: 'font/woff2',
+  eot: 'application/vnd.ms-fontobject',
+
+  // --- 其他/特殊格式 ---
+  apk: 'application/vnd.android.package-archive',
+  exe: 'application/x-msdownload',
+  msi: 'application/x-msdownload',
+  dwg: 'application/acad', // CAD文件，有时也用 application/x-autocad
+  psd: 'image/vnd.adobe.photoshop',
+  ai: 'application/postscript',
+  eps: 'application/postscript',
+  jsonld: 'application/ld+json',
+  mjs: 'text/javascript',
+
+  // --- 默认兜底 ---
+  default: 'application/octet-stream'
+};
+
+// 辅助函数：根据后缀获取类型
+export function getMimeType (suffix) {
+  const key = suffix.toLowerCase();
+  return mimeTypeMap[key] || mimeTypeMap.default;
+}
+```
+
+## 3-19 下载文件
+```js
+export function downloadFile (resultValue, filename = '新建文本文档', filetype = 'txt') {
+  if (resultValue) {
+    const blob = new Blob([resultValue], { type: getMimeType(filetype) });
+    const downloadElement = document.createElement('a');
+    const href = window.URL.createObjectURL(blob); // 创建下载的链接
+    const fileName = `${filename}.${filetype}`;
+    downloadElement.href = href;
+    downloadElement.download = fileName; // 下载后文件名
+    document.body.appendChild(downloadElement);
+    downloadElement.click(); // 点击下载
+    document.body.removeChild(downloadElement); // 下载完成移除元素
+    window.URL.revokeObjectURL(href); // 释放掉blob对象
+  } else {
+    this.$message.error('内容为空，不可保存');
+  }
+}
+```
+
+## 3-20 获取文件后缀
+```js
+export function getFileExtension (filename) {
+  if (!filename) return '';
+
+  // 找到最后一个点的位置
+  const lastDotIndex = filename.lastIndexOf('.');
+
+  // 如果没有点，或者点在第一个字符之前（如 .gitignore），返回空字符串
+  if (lastDotIndex === -1 || lastDotIndex === 0) {
+    return '';
+  }
+
+  // 截取点之后的部分并转为小写（可选，方便比较）
+  return filename.slice(lastDotIndex + 1).toLowerCase();
+}
+```
+## 3-21 生成随机字符串
+```js
+export function generateRandomNumbers () {
+  let d = new Date().getTime();
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+  return uuid;
+}
+```
+## 3-22 将扁平列表转换为树形结构
+```js
+/**
+ * 将扁平列表转换为树形结构
+ * @param {Array} list - 原始扁平数组
+ * @param {String} rootId - 根节点的 parentId 标识，默认为 'root'
+ * @returns {Array} - 树形结构数组
+ */
+function listToTree (list, rootId = 'root') {
+  // 1. 创建映射表：key 为 id，value 为节点对象
+  // 使用 Map 或者普通对象都可以，这里用普通对象
+  const map = {};
+  const tree = [];
+
+  // 2. 初始化：将所有节点放入 map，并初始化 children 数组
+  // 注意：这里需要深拷贝或者直接引用，通常直接引用即可，但为了安全可以浅拷贝 children
+  list.forEach(item => {
+    // 确保 children 存在且为数组，防止后端传 null 导致 push 报错
+    item.children = item.children || [];
+    map[item.id] = item;
+  });
+
+  // 3. 构建树：再次遍历，将节点挂载到父节点下
+  list.forEach(item => {
+    const parent = map[item.parentId];
+
+    if (parent) {
+      // 如果找到了父节点，将当前节点加入父节点的 children
+      parent.children.push(item);
+    } else {
+      // 如果没找到父节点（即 parentId 为 root 或 找不到对应 id），视为根节点
+      // 这里做一个额外判断，确保只有真正的根节点才进入 tree 数组
+      if (item.parentId === rootId || !item.parentId) {
+        tree.push(item);
+      } else {
+        // 这种情况通常是数据脏数据（父节点不存在），可以选择忽略或单独处理
+        console.warn(`发现孤立节点，ID: ${item.id}, 缺失的父ID: ${item.parentId}`);
+        // 也可以选择将其强行放入根节点，视业务需求而定
+        // tree.push(item);
+      }
+    }
+  });
+
+  return tree;
+}
+```
