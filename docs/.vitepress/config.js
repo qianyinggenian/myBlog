@@ -61,6 +61,9 @@ export default {
       },
       {
         text: '13、nginx', link: '/base/nginx/'
+      },
+      {
+        text: '14、bpmn', link: '/base/bpmn/'
       }
 		],
     search: {
