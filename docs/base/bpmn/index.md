@@ -39,7 +39,7 @@ export default {
 };
 
 ```
-## 3、camunda文件
+## 3、camunda.json文件
 ```json
 
 {
