@@ -11,7 +11,7 @@ hero:
       text: 在GitHub上查看
       link: 'https://github.com/qianyinggenian/myBlog'
   image:
-    src: /img/logo.ico
+    src: /img/浅影歌年.ico
     alt: 网页logo
     
 features:

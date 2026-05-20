@@ -11,7 +11,7 @@ export default {
 			'link',
 			{
 				rel: 'icon',
-				href: '/img/logo.ico',//图片放在public文件夹下
+				href: '/img/浅影歌年.ico',//图片放在public文件夹下
 			},
 		],
 	],
