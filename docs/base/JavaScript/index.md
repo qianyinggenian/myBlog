@@ -827,3 +827,67 @@ function listToTree (list, rootId = 'root') {
   return tree;
 }
 ```
+
+
+## 3-23 纯原生实现 ElementUI 风格的 Message
+```js
+// 纯原生实现 ElementUI 风格的 Message
+export function Message(options) {
+  // 如果传入字符串，直接当 message 使用
+  if (typeof options === 'string') {
+    options = { message: options };
+  }
+
+  const type = options.type || 'info';
+  const message = options.message || '';
+  const duration = options.duration || 3000;
+
+  // 颜色配置
+  const typeMap = {
+    success: '#67c23a',
+    warning: '#e6a23c',
+    error: '#f56c6c',
+    info: '#909399'
+  };
+
+  // 创建 DOM
+  const div = document.createElement('div');
+  div.style.cssText = `
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    color: ${typeMap[type]};
+    padding: 10px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    font-size: 14px;
+    z-index: 9999;
+    transition: all 0.3s ease;
+    opacity: 0;
+    margin-top: -20px;
+  `;
+  div.innerText = message;
+  document.body.appendChild(div);
+
+  // 显示动画
+  setTimeout(() => {
+    div.style.opacity = 1;
+    div.style.marginTop = '0';
+  }, 10);
+
+  // 自动关闭
+  setTimeout(() => {
+    div.style.opacity = 0;
+    div.style.marginTop = '-20px';
+    setTimeout(() => {
+      document.body.removeChild(div);
+    }, 300);
+  }, duration);
+}
+Message.success = (msg, duration) => Message({ type: 'success', message: msg, duration });
+Message.warning = (msg, duration) => Message({ type: 'warning', message: msg, duration });
+Message.error = (msg, duration) => Message({ type: 'error', message: msg, duration });
+Message.info = (msg, duration) => Message({ type: 'info', message: msg, duration });
+```
