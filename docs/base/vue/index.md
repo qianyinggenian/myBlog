@@ -1701,3 +1701,109 @@ const updateTitle = () => {
 };
 </script>
 ```
+## 4-20 vue读取文件内容
+### 1、vue2读取文件内容
+在 Vue2 中，由于底层使用的是 Webpack 构建工具，它默认不知道如何处理自定义后缀的文件。要直接读取文件的原始内容（例如 `.txt`、`.myfile` 等），主要有以下几种常见方案：
+
+### 方案一：配置 `raw-loader`（推荐用于项目内的静态资源）
+如果你的文件是作为项目源码的一部分存在，可以通过配置 Webpack 的 `raw-loader` 来让 Webpack 以纯文本字符串的形式导入文件。
+
+**步骤 1：** 安装依赖
+```bash
+npm install raw-loader --save-dev
+```
+
+**步骤 2：** 修改 `vue.config.js`
+在配置文件中的 `configureWebpack.module.rules` 下添加规则，指定你的目标文件后缀：
+```javascript
+const { defineConfig } = require("@vue/cli-service");
+
+module.exports = defineConfig({
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.(xml|bpmn)$/, // 同时匹配 .xml 和 .bpmn 后缀
+          loader: "raw-loader",
+        },
+      ],
+    },
+  },
+});
+```
+
+**步骤 3：** 在组件中直接使用 `import` 导入
+```html
+<script>
+// 直接将文件内容作为字符串导入
+import myfileContent from "./xx.myfile"; 
+
+export default {
+  data() {
+    return {
+      content: myfileContent
+    };
+  }
+};
+</script>
+```
+
+### 方案二：使用 HTML5 File API（推荐用于用户本地上传/选择文件）
+如果是需要用户在页面上手动选择并读取本地文件的内容，Vue 本身不能直接访问用户的文件系统，你需要借助 `<input type="file">` 和浏览器的 `FileReader` API。
+
+```html
+<template>
+  <div>
+    <input type="file" @change="handleFileSelect" />
+    <pre>{{ fileContent }}</pre> <!-- 展示读取到的原始内容 -->
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      fileContent: ""
+    };
+  },
+  methods: {
+    handleFileSelect(event) {
+      const file = event.target.files;
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.fileContent = e.target.result;
+      };
+      // readAsText 会将文件内容读取为文本字符串
+      reader.readAsText(file); 
+    }
+  }
+};
+</script>
+```
+*注：如果读取的是 Excel 或 CSV 等二进制数据文件，则需要引入如 `xlsx` (SheetJS) 或 `papaparse` 等第三方库进行解析。*
+
+### 方案三：通过 HTTP 请求获取（推荐用于服务器上的文件）
+如果文件存放在服务器的 `public` 目录下或远端，可以使用 `axios` 或原生的 `XMLHttpRequest/fetch` 发起异步请求来获取文件内容。
+
+```javascript
+import axios from 'axios';
+
+methods: {
+  async fetchFileContent(url) {
+    try {
+      const response = await axios.get(url);
+      this.fileContent = response.data; // response.data 即为文件的原始内容
+    } catch (error) {
+      console.error('读取文件失败:', error);
+    }
+  }
+}
+```
+### 2 vue3读取文件内容
+#### 使用vite搭建项目，例如我创建了一个名为 `sample.bpmn` 的文件，并使用 `?raw` 标记，这样 `bpmnXml` 变量中存储的就是该文件的原始内容：
+```js
+import bpmnXml from './sample.bpmn?raw';
+```
+
