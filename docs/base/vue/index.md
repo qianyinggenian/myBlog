@@ -1723,7 +1723,7 @@ module.exports = defineConfig({
     module: {
       rules: [
         {
-          test: /\.(xml|bpmn)$/, // 同时匹配 .xml 和 .bpmn 后缀
+          test: /\.(xml|bpmn)$/, // 例如获取.xml和。bpmn文件，匹配 .xml 和 .bpmn 后缀
           loader: "raw-loader",
         },
       ],
@@ -1736,7 +1736,7 @@ module.exports = defineConfig({
 ```html
 <script>
 // 直接将文件内容作为字符串导入
-import myfileContent from "./xx.myfile"; 
+import myfileContent from "./xx.bpmn"; 
 
 export default {
   data() {
