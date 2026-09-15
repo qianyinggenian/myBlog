@@ -31,12 +31,14 @@ List<EnterpriseCarInfo> uniqueMyVehicleList = uniqueList.stream()
                                 .values()
                                 .stream()
                                 .collect(Collectors.toList());
-        Map<String, Refund> refundMap = refundList.stream()
-                .collect(Collectors.toMap(
-                        Refund::getOutTradeNo,
-                        refund -> refund,
-                        (existing, replacement) -> replacement // 遇到重复key时，保留新值（覆盖旧值）
-                ));
+                                
+                                
+Map<String, Refund> refundMap = refundList.stream()
+        .collect(Collectors.toMap(
+                Refund::getOutTradeNo,
+                refund -> refund,
+                (existing, replacement) -> replacement // 遇到重复key时，保留新值（覆盖旧值）
+        ));
                 
 Map<String, List<String>> planIdToEquipmentIdsMap = planEquipmentList.stream()
         .collect(Collectors.groupingBy(
