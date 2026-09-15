@@ -37,6 +37,12 @@ List<EnterpriseCarInfo> uniqueMyVehicleList = uniqueList.stream()
                         refund -> refund,
                         (existing, replacement) -> replacement // 遇到重复key时，保留新值（覆盖旧值）
                 ));
+                
+Map<String, List<String>> planIdToEquipmentIdsMap = planEquipmentList.stream()
+        .collect(Collectors.groupingBy(
+                PlanEquipment::getEmergencyPlanId,
+                Collectors.mapping(PlanEquipment::getElectromechanicalEquipmentId, Collectors.toList())
+        ));
 ```
 ## 5、排序
 ```java
