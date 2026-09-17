@@ -1807,3 +1807,203 @@ methods: {
 import bpmnXml from './sample.bpmn?raw';
 ```
 
+## 4-21 滑块
+```vue
+<template>
+  <div
+    ref="sliderRef"
+    class="slider"
+    :class="{ dragging: isDragging }"
+    @mousedown="handleStart"
+    @touchstart="handleStart"
+  >
+    <!-- 轨道背景 -->
+    <div class="slider-track"></div>
+    <!-- 已播放进度 -->
+    <div class="slider-progress" :style="{ width: percent + '%' }"></div>
+    <!-- 缓冲进度（可选） -->
+    <div class="slider-buffer" :style="{ width: bufferPercent + '%' }"></div>
+    <!-- 拖拽手柄 -->
+    <div class="slider-thumb" :style="{ left: percent + '%' }"></div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+
+const props = defineProps({
+  // 当前值
+  modelValue: {
+    type: Number,
+    default: 0
+  },
+  // 最大值
+  max: {
+    type: Number,
+    default: 100
+  },
+  // 最小值
+  min: {
+    type: Number,
+    default: 0
+  },
+  // 缓冲进度百分比（0-100）
+  bufferPercent: {
+    type: Number,
+    default: 0
+  }
+});
+
+const emit = defineEmits(['update:modelValue', 'change', 'dragStart', 'dragEnd']);
+
+const sliderRef = ref(null);
+const isDragging = ref(false);
+
+// 计算进度百分比
+const percent = computed(() => {
+  const range = props.max - props.min;
+  if (range === 0) return 0;
+  return ((props.modelValue - props.min) / range) * 100;
+});
+
+// 获取事件坐标（兼容鼠标和触摸）
+function getClientX(e) {
+  console.log('eeee', e);
+  return e.touches ? e.touches[0].clientX : e.clientX;
+}
+
+// 计算值
+function getValueFromPosition(position) {
+  const rect = sliderRef.value.getBoundingClientRect();
+  const width = rect.width;
+  let ratio = (position - rect.left) / width;
+  // 限制在 0-1 之间
+  ratio = Math.max(0, Math.min(1, ratio));
+  const value = props.min + ratio * (props.max - props.min);
+  return Math.round(value * 100) / 100; // 保留两位小数
+}
+
+// 开始拖拽
+function handleStart(e) {
+  e.preventDefault();
+  isDragging.value = true;
+  const value = getValueFromPosition(getClientX(e));
+  emit('update:modelValue', value);
+  emit('dragStart', value);
+
+  // 绑定移动和结束事件到 document，防止鼠标移出滑块区域后丢失事件
+  document.addEventListener('mousemove', handleMove);
+  document.addEventListener('mouseup', handleEnd);
+  document.addEventListener('touchmove', handleMove, { passive: false });
+  document.addEventListener('touchend', handleEnd);
+}
+
+// 拖拽中
+function handleMove(e) {
+  if (!isDragging.value) return;
+  e.preventDefault();
+  const value = getValueFromPosition(getClientX(e));
+  emit('update:modelValue', value);
+}
+
+// 结束拖拽
+function handleEnd(e) {
+  if (!isDragging.value) return;
+  isDragging.value = false;
+  const value = getValueFromPosition(getClientX(e));
+  emit('update:modelValue', value);
+  emit('change', value);
+  emit('dragEnd', value);
+
+  // 移除全局事件
+  document.removeEventListener('mousemove', handleMove);
+  document.removeEventListener('mouseup', handleEnd);
+  document.removeEventListener('touchmove', handleMove);
+  document.removeEventListener('touchend', handleEnd);
+}
+
+// 组件卸载时清理事件
+onBeforeUnmount(() => {
+  document.removeEventListener('mousemove', handleMove);
+  document.removeEventListener('mouseup', handleEnd);
+  document.removeEventListener('touchmove', handleMove);
+  document.removeEventListener('touchend', handleEnd);
+});
+</script>
+
+<style scoped>
+.slider {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 拖拽时放大手柄 */
+.slider.dragging .slider-thumb {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+/* 轨道背景 */
+.slider-track {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+/* 已播放进度 */
+.slider-progress {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: #ff0000;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* 缓冲进度 */
+.slider-buffer {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  /*background: rgba(255, 255, 255, 0.5);*/
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 拖拽手柄 */
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background: #ff0000;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* PC 端 hover 效果 */
+@media (hover: hover) {
+  .slider:hover .slider-thumb {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+</style>
+
+```
